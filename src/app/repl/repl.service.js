@@ -1,4 +1,5 @@
 import { createInterface } from 'readline';
+import { colorize } from '../utils/colorize.js';
 
 export class ReplService {
 	#rl; // private field to store the readline interface
@@ -9,21 +10,28 @@ export class ReplService {
 	}
 
 	// initializes the ReplService with helloMessage, exitMessage, and handleInput callback
-	init({ helloMessage, exitMessage, handleInput }) {
-		// event handler for the 'close' event
-		this.#rl.on('close', () => {
+	init({ process, helloMessage, exitMessage, handleInput }) {
+		const rl = createInterface({
+			input: process.stdin,
+			output: process.stdout,
+			prompt: colorize('purple', '> '),
+		});
+		rl.on('close', () => {
 			console.log(exitMessage); // logs the exitMessage
-			this.exit(); // calls the exit function
+			process.exit();
 		});
 
 		// event handler for the 'line' event
-		this.#rl.on('line', (line) => {
-			handleInput(line); // calls the handleInput callback with the input line
-			this.#rl.prompt(); // prompts for the next input
+		rl.on('line', (line) => {
+			handleInput(line.trim()); // calls the handleInput callback with the input line
+			rl.prompt(); // prompts for the next input
 		});
 
 		console.log(helloMessage); // logs the helloMessage
-		this.#rl.prompt(); // prompts for the initial input
+
+		rl.prompt(); // prompts for the initial input
+
+		this.#rl = rl;
 	}
 
 	// closes the readline interface

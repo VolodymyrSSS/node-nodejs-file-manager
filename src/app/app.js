@@ -1,7 +1,6 @@
 import { CommandService } from './command/command.service.js';
 import { ReplService } from './repl/repl.service.js';
 import { StateService } from './state/state.service.js';
-import { colorize } from './utils/colorize.js';
 
 import { colorize } from './utils/colorize.js';
 import { parseProcessArgs } from './utils/parse-process-args.js';
