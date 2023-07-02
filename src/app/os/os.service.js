@@ -1,30 +1,45 @@
+import { EOL, arch, cpus, homedir, userInfo } from 'os'; // importing necessary functions and objects from the 'os' module
+import { parseArgs } from '../utils/parse-args.js'; // importing the 'parseArgs' function from a custom module
+
+//  providing various operating system-related services
 export class OSService {
-	init(stateService) {
-		this.stateService = stateService; // assigning the 'stateService' object to 'this.stateService'
+	commands = new Map([
+		['--EOL', () => this.eol()], // mapping the '--EOL' argument to the 'eol' method
+		['--cpus', () => this.cpus()], // mapping the '--cpus' argument to the 'cpus' method
+		['--homedir', () => this.homedir()], // mapping the '--homedir' argument to the 'homedir' method
+		['--username', () => this.username()], // mapping the '--username' argument to the 'username' method
+		['--architecture', () => this.architecture()], // mapping the '--architecture' argument to the 'architecture' method
+	]);
+
+	os(args) {
+		parseArgs(args).forEach((arg) => {
+			const callback = this.commands.get(arg); // retrieve the callback function associated with the current argument
+			if (callback) callback(); // if a valid callback is found, invoke it
+		});
 	}
-	set cwd(path) {
-		this.stateService.set('cwd', path); // setting the current working directory
-	}
-	get cwd() {
-		return this.stateService.get('cwd'); // returning the current working directory
-	}
+
 	eol() {
-		throw new Error('Not implemented'); // throwing an error indicating that the 'eol' method is not implemented
+		console.log(`Default system EOL: ${JSON.stringify(EOL)}`); // print the default system end-of-line characters
 	}
 
 	cpus() {
-		throw new Error('Not implemented'); // throwing an error indicating that the 'cpus' method is not implemented
+		const cpuList = cpus().map((cpu) => ({
+			Model: cpu.model,
+			'Clock rate (GHz)': cpu.speed / 1000,
+		})); // retrieve CPU information and create an array of objects containing the model and clock rate
+		console.log(`Overall amount of CPUS: ${cpuList.length}`); // print the overall number of CPUs
+		console.table(cpuList); // print the table representation of the CPU information
 	}
 
 	homedir() {
-		throw new Error('Not implemented'); // throwing an error indicating that the 'homedir' method is not implemented
+		console.log(`Home directory: ${homedir()}`); // print the path of the user's home directory
 	}
 
 	username() {
-		throw new Error('Not implemented'); // throwing an error indicating that the 'username' method is not implemented
+		console.log(`System User Name: ${userInfo().username}`); // print the system user name
 	}
 
 	architecture() {
-		throw new Error('Not implemented'); // throwing an error indicating that the 'architecture' method is not implemented
+		console.log(`CPU architecture: ${arch()}`); // print the CPU architecture
 	}
 }
