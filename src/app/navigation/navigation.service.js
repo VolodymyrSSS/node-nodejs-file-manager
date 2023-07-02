@@ -1,4 +1,4 @@
-import { stat } from 'fs/promises';
+import { stat, readdir } from 'fs/promises';
 import { resolve } from 'path';
 import { parsePathList } from '../utils/parse-path-list.js';
 
@@ -27,10 +27,35 @@ export class NavigationService {
 
 		try {
 			const stats = await stat(targetPath); // awaiting the asynchronous result of calling the stat function on the targetPath
-			if (stats.isDirectory()) this.cwd = targetPath; // checking if the targetPath corresponds to a directory, if so, updating the current working directory (this.cwd) to the targetPath
+			if (stats.isDirectory()) this.cwd = targetPath;
+			// checking if the targetPath corresponds to a directory, if so, updating the current working directory (this.cwd) to the targetPath
+			else throw new Error('Operation failed');
 		} catch (error) {
 			// catching any errors that occurred within the try block
 			throw new Error('Operation failed');
 		}
+	}
+
+	// defining an asynchronous list method
+	async list() {
+		// awaiting the result of the readdir function, which reads the contents of the current working directory (this.cwd) and returns an array of Dirent objects (file system entries)
+		const dirents = await readdir(this.cwd, { withFileTypes: true });
+
+		const list = dirents
+			.map((dirent) => ({
+				Name: dirent.name, // setting the Name property of the new object to the name of the dirent
+				Type: dirent.isFile()
+					? 'file'
+					: dirent.isDirectory()
+					? 'directory'
+					: dirent.isSymbolicLink()
+					? 'symbolic-link'
+					: '', // setting the Type property of the new object based on the type of dirent, checking if it's a file, directory, symbolic link, or empty string
+			})) // mapping over each dirent object and creating a new object with specific properties
+			.sort(
+				(a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name)
+			); // sorting the list array of objects first by Type and then by Name
+
+		console.table(list); // displaying the list array of objects in tabular format in the console
 	}
 }

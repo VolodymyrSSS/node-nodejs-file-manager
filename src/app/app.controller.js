@@ -12,25 +12,28 @@ export class AppController {
 			zipService,
 		} = services; // destructure the services
 
-		navigationService.init(stateService); // retrieve the username from the stateService
+		// initializes multiple service objects by calling their respective init methods, passing the stateService as a parameter for each service object in the array
+		[navigationService, filesService, hashService, zipService].forEach(
+			(service) => service.init(stateService)
+		);
 
 		// define the echo function for logging colored text
-		const echo = (args) => console.log(colorize('yellow', args.join(' ')));
+		const echo = (args) => console.log(colorize('yellow', args));
 
 		const commands = new Map([
 			['.exit', () => replService.close()], // when the '.exit' command is executed, it will call the close function of the replService object. It's for closing the REPL (Read-Eval-Print Loop) service or the interactive command-line interface
 			['echo', echo], // handler function for 'echo' command
-			['kek', () => echo(['someone keked!'])], // when the 'kek' command is executed, it will invoke the echo function with the message 'someone keked!' as an argument
+			['kek', () => echo('someone keked!')], // when the 'kek' command is executed, it will invoke the echo function with the message 'someone keked!' as an argument
 			['cwd', () => echo(navigationService.cwd)], // when the 'cwd' command is executed, it will invoke the echo function with the current working directory
 			['up', () => navigationService.upperDir()], // when the 'up' command is executed, it will call the upperDir function of the navigationService object
-			['cd', (args) => navigationService.changeDir(args.join(' '))], // when the 'cd' command is executed, it will call the changeDir function of the navigationService object, passing the joined arguments as the new directory path
-			['ls', () => echo('executed ls!')], // when the 'ls' command is executed, it will invoke the echo function with the message 'executed ls!' as an argument
-			['cat', () => echo('executed cat!')], // when the 'cat' command is executed, it will invoke the echo function with the message 'executed cat!' as an argument
-			['add', () => echo('executed add!')], // when the 'add' command is executed, it will invoke the echo function with the message 'executed add!' as an argument
-			['rn', () => echo('executed rn!')], //  when the 'rn' command is executed, it will invoke the echo function with the message 'executed rn!' as an argument
-			['cp', () => echo('executed cp!')], // when the 'cp' command is executed, it will invoke the echo function with the message 'executed cp!' as an argument
-			['mv', () => echo('executed mv!')], // when the 'mv' command is executed, it will invoke the echo function with the message 'executed mv!' as an argument
-			['rm', () => echo('executed rm!')], // when the 'rm' command is executed, it will invoke the echo function with the message 'executed rm!' as an argument
+			['cd', (args) => navigationService.changeDir(args)], // when the 'cd' command is executed, it will call the changeDir function of the navigationService object, passing the joined arguments as the new directory path
+			['ls', () => navigationService.list()], // when the 'ls' command is executed, it will call the list function of the navigationService object
+			['cat', (args) => filesService.concatenate(args)], // command 'cat' with an associated handler function that invokes the concatenate method on the filesService object, passing the command arguments (args) as a parameter
+			['add', (args) => filesService.addFile(args)], // command 'add' with an associated handler function that invokes the addFile method on the filesService object, passing the command arguments (args) as a parameter
+			['rn', (args) => filesService.renameFile(args)], //  command 'rn' with an associated handler function that invokes the renameFile method on the filesService object, passing the command arguments (args) as a parameter
+			['cp', (args) => filesService.copyFile(args)], // a command 'cp' with an associated handler function that invokes the copyFile method on the filesService object, passing the command arguments (args) as a parameter
+			['mv', (args) => filesService.moveFile(args)], // command 'mv' with an associated handler function that invokes the moveFile method on the filesService object, passing the command arguments (args) as a parameter
+			['rm', (args) => filesService.removeFile(args)], // command 'rm' with an associated handler function that invokes the removeFile method on the filesService object, passing the command arguments (args) as a parameter
 			['os', () => echo('executed os!')], //  when the 'os' command is executed, it will invoke the echo function with the message 'executed os!' as an argument
 			['hash', () => echo('executed hash!')], // when the 'hash' command is executed, it will invoke the echo function with the message 'executed hash!' as an argument
 			['compress', () => echo('executed compress!')], // when the 'compress' command is executed, it will invoke the echo function with the message 'executed compress!' as an argument
@@ -45,12 +48,13 @@ export class AppController {
 			this.buildMessage(`You are currently in ${navigationService.cwd}`);
 
 		const handleInput = async (input) => {
-			if (!input) return; // if input is empty, return early
-			const [command, ...args] = input.split(/\s+/); // split input into command  using a regular exp and arguments
+			const trimmedInput = input.trim();
+			if (!trimmedInput) return; // if trimmedInput is empty, return early
+			const [command, ...args] = trimmedInput.split(' '); // split trimmedInput into command and arguments
 			const handler = commands.get(command); // retrieve the handler function for the command
 			try {
-				if (handler)
-					await handler(args); // checks if a valid handler function exists
+				// checks if a handler function exists and, if it does, calls it with the arguments joined together as a string with spaces and trimmed of any extra whitespace
+				if (handler) await handler(args.join(' ').trim());
 				else throw new Error('Invalid input'); // if an error occurs during the execution
 			} catch (error) {
 				// if an error occurs during the execution
