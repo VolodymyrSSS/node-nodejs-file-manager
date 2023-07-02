@@ -1,5 +1,5 @@
 import { stat, readdir } from 'fs/promises';
-import { resolve } from 'path';
+import { isAbsolute, resolve } from 'path';
 import { parsePathList } from '../utils/parse-path-list.js';
 
 export class NavigationService {
@@ -22,7 +22,13 @@ export class NavigationService {
 
 	async changeDir(args) {
 		const [pathToDirectory] = parsePathList(args);
-		const targetPath = resolve(this.cwd, pathToDirectory); // resolving the targetPath by combining this.cwd (current working directory) and the relativePath
+		const isWin32 = this.stateService.get('platform') === 'win32'; // check if the platform is 'win32'
+		const isWin32RootPath =
+			pathToDirectory.includes(':') && !isAbsolute(pathToDirectory); // check if the pathToDirectory includes a ':' and is not an absolute path (e.g., 'C:\')
+		const targetPath = resolve(
+			isWin32 && isWin32RootPath ? '/' : this.cwd, // if it's a win32 platform and a root path, set the targetPath to '/'
+			pathToDirectory // otherwise, set the targetPath to the current working directory (this.cwd) concatenated with the pathToDirectory
+		);
 
 		try {
 			const stats = await stat(targetPath); // awaiting the asynchronous result of calling the stat function on the targetPath

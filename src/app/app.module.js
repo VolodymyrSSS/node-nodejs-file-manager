@@ -19,6 +19,7 @@ export class App {
 		const username = args.get('username') ?? 'Username'; // retrieve the username from the parsed arguments, or use a default value
 
 		this.stateService = new StateService(); // create an instance of the StateService
+		this.stateService.set('platform', process.platform); // it allows accessing and using the platform information elsewhere in the program
 		this.stateService.set('cwd', homedir()); // set the current working directory in the stateService
 		this.stateService.set('username', username); // set the username in the stateService
 
