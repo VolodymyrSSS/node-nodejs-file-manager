@@ -34,10 +34,10 @@ export class AppController {
 			['cp', (args) => filesService.copyFile(args)], // a command 'cp' with an associated handler function that invokes the copyFile method on the filesService object, passing the command arguments (args) as a parameter
 			['mv', (args) => filesService.moveFile(args)], // command 'mv' with an associated handler function that invokes the moveFile method on the filesService object, passing the command arguments (args) as a parameter
 			['rm', (args) => filesService.removeFile(args)], // command 'rm' with an associated handler function that invokes the removeFile method on the filesService object, passing the command arguments (args) as a parameter
-			['os', () => echo('executed os!')], //  when the 'os' command is executed, it will invoke the echo function with the message 'executed os!' as an argument
-			['hash', () => echo('executed hash!')], // when the 'hash' command is executed, it will invoke the echo function with the message 'executed hash!' as an argument
-			['compress', () => echo('executed compress!')], // when the 'compress' command is executed, it will invoke the echo function with the message 'executed compress!' as an argument
-			['decompress', () => echo('executed decompress!')], // when the 'decompress' command is executed, it will invoke the echo function with the message 'executed decompress!' as an argument
+			['os', (args) => osService.os(args)], // element representing the 'os' command and its corresponding handler function
+			['hash', (args) => hashService.hash(args)], // element representing the 'hash' command and its corresponding handler function
+			['compress', (args) => zipService.compress(args)], // an array element representing the 'compress' command and its corresponding handler function
+			['decompress', (args) => zipService.decompress(args)], // an array element representing the 'decompress' command and its corresponding handler function
 		]);
 
 		// retrieve the username value
