@@ -24,6 +24,10 @@ export class AppController {
 			['cwd', () => echo(stateService.get('cwd'))], // handler function for 'cwd' command
 		]);
 
+		// retrieve the current working directory value
+		const getCurrentCwd = () =>
+			this.buildMessage(`You are currently in ${stateService.get('cwd')}`); // invoked with a string template literal
+
 		// define the map of commands and their corresponding handlers
 		const handleInput = (input) => {
 			if (!input) return; // if input is empty, return early
@@ -35,10 +39,12 @@ export class AppController {
 		};
 
 		// build the helloMessage with username
-		const helloMessage = this.buildMessage(
+		let helloMessage = this.buildMessage(
 			`Welcome to the File Manager, ${username}!`,
 			username
 		);
+		// string interpolation to add a newline character (EOL) followed by the result of invoking the getCurrentCwd function
+		helloMessage += `${EOL}${getCurrentCwd()}`; //
 
 		// build the exitMessage with username
 		const exitMessage = this.buildMessage(
