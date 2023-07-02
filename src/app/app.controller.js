@@ -16,11 +16,12 @@ export class AppController {
 
 		// define the echo function for logging colored text
 		const echo = (...args) => console.log(colorize('yellow', args.join(' ')));
+
 		const commands = new Map([
 			['.exit', () => replService.close()], // handler function for '.exit' command
 			['echo', echo], // handler function for 'echo' command
 			['kek', () => echo('someone keked!')], // handler function for 'kek' command
-			['cwd', () => echo(stateService.get('cwd'))], // // handler function for 'cwd' command
+			['cwd', () => echo(stateService.get('cwd'))], // handler function for 'cwd' command
 		]);
 
 		// define the map of commands and their corresponding handlers
@@ -33,16 +34,18 @@ export class AppController {
 			else console.error(colorize('red', 'Invalid input')); // log an error message for invalid input
 		};
 
-		// build the helloMessage and exitMessage with username
+		// build the helloMessage with username
 		const helloMessage = this.buildMessage(
 			`Welcome to the File Manager, ${username}!`,
 			username
 		);
 
+		// build the exitMessage with username
 		const exitMessage = this.buildMessage(
 			`${EOL}Thank you for using File Manager, ${username}, goodbye!`,
 			username
 		);
+
 		// initialize the replService with process, handleInput, helloMessage, and exitMessage
 		replService.init({ process, handleInput, helloMessage, exitMessage });
 	}

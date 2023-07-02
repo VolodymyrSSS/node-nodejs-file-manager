@@ -22,8 +22,8 @@ export class App {
 		this.stateService.set('cwd', homedir()); // set the current working directory in the stateService
 		this.stateService.set('username', username); // set the username in the stateService
 
+		// create an instance of the AppController with necessary dependencies
 		this.appController = new AppController(process, this.stateService, {
-			// create an instance of the AppController with necessary dependencies
 			replService: new ReplService(), // create an instance of the ReplService
 			filesService: new FilesService(), // create an instance of the FilesService
 			hashService: new HashService(), // create an instance of the HashService
