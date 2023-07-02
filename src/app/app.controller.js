@@ -45,7 +45,7 @@ export class AppController {
 
 		// retrieve the current working directory value
 		const getCurrentCwd = () =>
-			this.buildMessage(`You are currently in ${navigationService.cwd}`);
+			this.buildMessage(`${EOL}You are currently in ${navigationService.cwd}`);
 
 		const handleInput = async (input) => {
 			const trimmedInput = input.trim();

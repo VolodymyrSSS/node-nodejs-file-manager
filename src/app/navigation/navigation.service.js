@@ -21,9 +21,8 @@ export class NavigationService {
 	}
 
 	async changeDir(args) {
-		const [relativePath] = parsePathList(args); // destructuring the first item from the array returned by the parsePathList function into relativePath
-
-		const targetPath = resolve(this.cwd, relativePath); // resolving the targetPath by combining this.cwd (current working directory) and the relativePath
+		const [pathToDirectory] = parsePathList(args);
+		const targetPath = resolve(this.cwd, pathToDirectory); // resolving the targetPath by combining this.cwd (current working directory) and the relativePath
 
 		try {
 			const stats = await stat(targetPath); // awaiting the asynchronous result of calling the stat function on the targetPath

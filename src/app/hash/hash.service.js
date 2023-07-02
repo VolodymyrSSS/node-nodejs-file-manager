@@ -1,6 +1,8 @@
 import { createHash } from 'crypto';
 import { createReadStream } from 'fs';
 import { resolve } from 'path';
+import { parsePathList } from '../utils/parse-path-list.js';
+
 export class HashService {
 	// initializing the HashService with a stateService object
 	init(stateService) {
@@ -17,7 +19,9 @@ export class HashService {
 		return new Promise((res, rej) => {
 			const hash = createHash('sha256'); // creating a hash object using the 'sha256' algorithm
 
-			const filePath = resolve(this.cwd, args); // resolving the file path based on the current working directory and the provided args
+			const [pathToFile] = parsePathList(args);
+			const filePath = resolve(this.cwd, pathToFile); // resolving the file path based on the current working directory and the provided args
+
 			const readStream = createReadStream(filePath); // creating a read stream for the file
 
 			readStream.on('error', () => rej(new Error('Operation failed'))); // handling any error that occurs during reading the file

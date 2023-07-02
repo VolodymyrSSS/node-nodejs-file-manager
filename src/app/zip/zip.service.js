@@ -23,6 +23,7 @@ export class ZipService {
 				const readStream = createReadStream(srcFilePath); // create a read stream to read data from the source file
 				const writeStream = createWriteStream(destFilePath, { flags: 'wx' }); // create a write stream to write compressed data to the destination file
 
+				brotli.on('error', () => rej(new Error('Operation failed')));
 				readStream.on('error', () => rej(new Error('Operation failed'))); // handle read stream error event
 				writeStream.on('error', () => rej(new Error('Operation failed'))); // handle write stream error event
 				writeStream.on('close', res); // handle write stream close event
@@ -44,6 +45,7 @@ export class ZipService {
 				const readStream = createReadStream(srcFilePath); // create a read stream to read data from the source file
 				const writeStream = createWriteStream(destFilePath, { flags: 'wx' }); // create a write stream to write decompressed data to the destination file
 
+				brotli.on('error', () => rej(new Error('Operation failed')));
 				readStream.on('error', () => rej(new Error('Operation failed'))); // handle read stream error event
 				writeStream.on('error', () => rej(new Error('Operation failed'))); // handle write stream error event
 				writeStream.on('close', res); // handle write stream close event
