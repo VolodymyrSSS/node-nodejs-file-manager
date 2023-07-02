@@ -17,8 +17,8 @@ export class ReplService {
 		});
 
 		// event handler for the 'line' event
-		rl.on('line', (line) => {
-			handleInput(line.trim()); // calls the handleInput callback with the input line
+		rl.on('line', async (line) => {
+			await handleInput(line.trim()); // calls the handleInput callback with the input line
 			rl.prompt(); // prompts for the next input
 		});
 
