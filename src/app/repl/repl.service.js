@@ -4,11 +4,6 @@ import { colorize } from '../utils/colorize.js';
 export class ReplService {
 	#rl; // private field to store the readline interface
 
-	constructor({ exit, input, output, prompt }) {
-		this.#rl = createInterface({ input, output, prompt }); // creates a readline interface
-		this.exit = exit; // sets the exit function
-	}
-
 	// initializes the ReplService with helloMessage, exitMessage, and handleInput callback
 	init({ process, helloMessage, exitMessage, handleInput }) {
 		const rl = createInterface({
