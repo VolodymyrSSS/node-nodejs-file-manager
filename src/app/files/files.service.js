@@ -69,8 +69,8 @@ export class FilesService {
 				writeStream.on('close', res); // resolve the promise when the write stream is closed successfully
 
 				readStream.pipe(writeStream); // pipe the read stream into the write stream to perform the copy operation
-			} catch (error) {
-				rej(new Error('Operation failed')); // if any error occurs during the process, reject the promise with an error
+			} catch {
+				rej(new Error('Operation failed')); // if any error occurs during the process, reject the promise with a new error
 			}
 		});
 	}

@@ -24,7 +24,7 @@ export class OSService {
 
 	cpus() {
 		const cpuList = cpus().map((cpu) => ({
-			Model: cpu.model,
+			Model: cpu.model.trim(),
 			'Clock rate (GHz)': cpu.speed / 1000,
 		})); // retrieve CPU information and create an array of objects containing the model and clock rate
 		console.log(`Overall amount of CPUS: ${cpuList.length}`); // print the overall number of CPUs
