@@ -39,8 +39,12 @@ export class FilesService {
 			const [pathToFile, newFileName] = parsePathList(args); // parse the provided args to get the path to the file and the new file name
 			const srcFilePath = resolve(this.cwd, pathToFile); // resolve the source file path based on the current working directory and the path to the file
 			const srcFileStats = await stat(srcFilePath); // get the stats of the source file
-			const newFilePath = resolve(dirname(srcFilePath), newFileName); // resolve the new file path based on the directory of the source file and the new file name
-			if (srcFileStats.isFile()) return await rename(srcFilePath, newFilePath); // if the source file is a regular file, rename it to the new file path
+			const destToFolderName = dirname(srcFilePath);
+			const newFilePath = resolve(destToFolderName, newFileName); // resolve the new file path based on the directory of the source file and the new file name
+
+			if (srcFileStats.isFile()) {
+				return rename(srcFilePath, newFilePath); // if the source file is a regular file, rename it to the new file path
+			}
 			throw new Error('Operation failed'); // throw an error if the operation fails
 		} catch {
 			throw new Error('Operation failed'); // throw an error if the operation fails
@@ -53,12 +57,20 @@ export class FilesService {
 				const [pathToFile, pathToNewDirectory] = parsePathList(args); // parse the provided args to get the path to the file and the path to the destination directory
 				const srcFilePath = resolve(this.cwd, pathToFile); // resolve the source file path based on the current working directory and the path to the file
 				const destDirPath = resolve(this.cwd, pathToNewDirectory); // resolve the destination directory path based on the current working directory and the path to the destination directory
-				const srcFileStats = await stat(srcFilePath); // get the stats of the source file
-				const destDirStats = await stat(destDirPath); // get the stats of the destination directory
+
+				const [srcFileStats, destDirStats] = await Promise.all([
+					stat(srcFilePath),
+					stat(destDirPath),
+				]);
+
+				// const srcFileStats = await stat(srcFilePath); // get the stats of the source file
+				// const destDirStats = await stat(destDirPath); // get the stats of the destination directory
 
 				// check if both source and destination are valid (source is a file, destination is a directory)
-				if (!(srcFileStats.isFile() && destDirStats.isDirectory()))
+				if (!(srcFileStats.isFile() && destDirStats.isDirectory())) {
 					rej(new Error('Operation failed')); // if not, reject the promise with an error
+				}
+
 				const readStream = createReadStream(srcFilePath); // create a read stream to read the source file
 				const writeStream = createWriteStream(
 					resolve(destDirPath, basename(srcFilePath)), // resolve the full destination path by joining the destination directory and the base name of the source file
@@ -91,8 +103,9 @@ export class FilesService {
 	async removeFile(args) {
 		const [pathToFile] = parsePathList(args); // parse the 'args' using the 'parsePathList' function to get the path to the file to be removed
 		const filePath = resolve(this.cwd, pathToFile); // resolving the file path using the current working directory and the 'pathToFile'
+
 		try {
-			return await rm(filePath); // using the 'rm' function from 'fs/promises' to remove the filePath
+			return rm(filePath); // using the 'rm' function from 'fs/promises' to remove the filePath
 		} catch {
 			throw new Error('Operation failed'); // if any error occurs during the process, throw an error
 		}

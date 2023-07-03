@@ -3,7 +3,12 @@ export class StateService {
 	static #state = new Map(); // private static field to store the state as a Map
 
 	constructor() {
-		StateService.#instance ??= this; // assigns 'this' to #instance if it is currently null or undefined
+		if (!StateService.#instance) {
+			StateService.#instance = this;
+		}
+
+		// alternative: StateService.#instance ??= this; // assigns 'this' to #instance if it is currently null or undefined
+
 		return StateService.#instance; // returns the instance to ensure only a single instance is created
 	}
 

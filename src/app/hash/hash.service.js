@@ -25,7 +25,9 @@ export class HashService {
 			const readStream = createReadStream(filePath); // creating a read stream for the file
 
 			readStream.on('error', () => rej(new Error('Operation failed'))); // handling any error that occurs during reading the file
+
 			readStream.on('data', (chunk) => hash.update(chunk)); // updating the hash with each chunk of data read from the file
+
 			readStream.on('end', () => {
 				console.log(hash.digest('hex')); // printing the hex-encoded hash digest to the console
 				res(); // resolving the promise to indicate the completion of the hashing operation

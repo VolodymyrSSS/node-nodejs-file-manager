@@ -55,7 +55,7 @@ export class NavigationService {
 					? 'directory'
 					: dirent.isSymbolicLink()
 					? 'symbolic-link'
-					: '', // setting the Type property of the new object based on the type of dirent, checking if it's a file, directory, symbolic link, or empty string
+					: 'unknown', // setting the Type property of the new object based on the type of dirent, checking if it's a file, directory, symbolic link, or unknown
 			})) // mapping over each dirent object and creating a new object with specific properties
 			.sort(
 				(a, b) => a.Type.localeCompare(b.Type) || a.Name.localeCompare(b.Name)

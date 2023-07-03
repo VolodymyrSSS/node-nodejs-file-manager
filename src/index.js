@@ -18,5 +18,3 @@ const app = new App(process, AppController, {
 	StateService,
 	ZipService,
 });
-
-app.run();

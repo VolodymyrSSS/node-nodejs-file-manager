@@ -1,13 +1,11 @@
 const defaultColor = '[0m'; // default color code
 const colors = new Map([
-	['black', '[30m'], // color code for 'black'
 	['red', '[31m'], // color code for 'red'
 	['green', '[32m'], // color code for 'green'
 	['yellow', '[33m'], // color code for 'yellow'
 	['blue', '[34m'], // color code for 'blue'
 	['purple', '[35m'], // color code for 'purple'
 	['cyan', '[36m'], // color code for 'cyan'
-	['white', '[37m'], // color code for 'white'
 ]);
 
 // function to apply color to the given text using the specified color name

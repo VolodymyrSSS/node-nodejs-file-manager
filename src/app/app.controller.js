@@ -41,7 +41,7 @@ export class AppController {
 		]);
 
 		// retrieve the username value
-		const username = stateService.get('username') ?? 'Username';
+		const username = stateService.get('username');
 
 		// retrieve the current working directory value
 		const getCurrentCwd = () =>

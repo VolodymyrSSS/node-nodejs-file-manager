@@ -33,6 +33,4 @@ export class App {
 			zipService: new ZipService(), // Create an instance of the ZipService
 		});
 	}
-
-	run() {}
 }
