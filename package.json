@@ -1,22 +1,24 @@
 {
-  "name": "nodejs-file-manager",
-  "version": "1.0.0",
-  "description": "node file-manager",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/VolodymyrSSS/node-nodejs-file-manager.git"
-  },
-  "keywords": [
-    "node"
-  ],
-  "author": "VolodymyrSSS",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/VolodymyrSSS/node-nodejs-file-manager/issues"
-  },
-  "homepage": "https://github.com/VolodymyrSSS/node-nodejs-file-manager#readme"
+	"name": "nodejs-file-manager",
+	"version": "1.0.0",
+	"description": "NodeJS RSSchool-Task2 file-manager",
+	"main": "src/index.js",
+	"type": "module",
+	"scripts": {
+		"start": "node src",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/VolodymyrSSS/node-nodejs-file-manager.git"
+	},
+	"keywords": [
+		"node"
+	],
+	"author": "VolodymyrSSS",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/VolodymyrSSS/node-nodejs-file-manager/issues"
+	},
+	"homepage": "https://github.com/VolodymyrSSS/node-nodejs-file-manager#readme"
 }
